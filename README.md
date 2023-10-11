@@ -17,3 +17,11 @@ Repository for a series of mini frontend projects.
 
 -   Code Editor: VS Code
 -   Extensions: **Emmet** for writing HTML faster, **live-server**, **Prettier**
+
+### Personal Notes
+
+_Start date:_ 11 October 2023
+
+| Project | Completion date (2023) |
+| :-----: | :--------------------: |
+|  **1**  |       11 October       |
