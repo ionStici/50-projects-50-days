@@ -25,3 +25,4 @@ _Start date:_ 11 October 2023
 | Project | Completion date (2023) |
 | :-----: | :--------------------: |
 |  **1**  |       11 October       |
+|  **2**  |       15 October       |
