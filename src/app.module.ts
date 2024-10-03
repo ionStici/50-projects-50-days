@@ -6,6 +6,11 @@ import { PostsModule } from './posts/posts.module';
 import { AuthModule } from './auth/auth.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './users/user.entity';
+import { TagsModule } from './tags/tags.module';
+import { MetaOptionsModule } from './meta-options/meta-options.module';
+import { Tag } from './tags/tag.entity';
+import { Post } from './posts/post.entity';
+import { MetaOption } from './meta-options/meta-option.entity';
 
 @Module({
   imports: [
@@ -17,7 +22,8 @@ import { User } from './users/user.entity';
       inject: [],
       useFactory: () => ({
         type: 'postgres',
-        entities: [User],
+        // entities: [User, Tag, Post, MetaOption],
+        autoLoadEntities: true,
         synchronize: true,
         port: 5432,
         username: 'postgres',
@@ -26,6 +32,8 @@ import { User } from './users/user.entity';
         database: 'nestjs-blog',
       }),
     }),
+    TagsModule,
+    MetaOptionsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
