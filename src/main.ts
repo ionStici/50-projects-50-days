@@ -11,6 +11,10 @@ async function bootstrap() {
       whitelist: true,
       forbidNonWhitelisted: true,
       transform: true,
+      // HERE
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
     }),
   );
 

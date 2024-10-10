@@ -1,1 +1,10 @@
-GET http://localhost:3000/posts
+{{
+  // pre request scripts
+  const date = new Date()
+  exports.startDate = date.toString()
+  exports.endDate = date.toString()
+}}
+# ?startDate={{startDate}}
+# &endDate={{endDate}}
+
+GET http://localhost:3000/posts/1/?limit=3&page=2

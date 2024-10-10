@@ -12,6 +12,9 @@ import { Repository } from 'typeorm';
 import { Post } from '../post.entity';
 import { TagsService } from 'src/tags/providers/tags.service';
 import { PatchPostDto } from '../dtos/patch-post.dto';
+import { GetPostsDto } from '../dtos/get-posts.dto';
+import { PaginationService } from 'src/common/pagination/providers/pagination.service';
+import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
 
 @Injectable()
 export class PostsService {
@@ -37,6 +40,8 @@ export class PostsService {
      * Inject tagsService
      */
     private readonly tagsService: TagsService,
+
+    private readonly paginationService: PaginationService,
   ) {}
 
   /**
@@ -59,14 +64,12 @@ export class PostsService {
     return await this.postRepository.save(post);
   }
 
-  public async findAll() {
-    const posts = await this.postRepository.find({
-      relations: {
-        metaOptions: true,
-        // tags: true,
-        // author: true,
-      },
-    });
+  // PAGINATION
+  public async findAll(postQuery: GetPostsDto): Promise<Paginated<Post>> {
+    const posts = await this.paginationService.paginateQuery(
+      { limit: postQuery.limit, page: postQuery.page },
+      this.postRepository,
+    );
 
     return posts;
   }
