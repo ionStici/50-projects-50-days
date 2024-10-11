@@ -17,6 +17,8 @@ import { GetUsersParamDto } from '../dtos/get-users-param.dto';
 import { User } from '../user.entity';
 import profileConfig from './../config/profile.config';
 import { UsersCreateManyProvider } from './users-create-many.provider';
+import { CreateUserProvider } from './create-user.provider';
+import { FindOneByEmailProvider } from './find-one-by-email.provider';
 
 /**
  * Class to connect to Users table and perform business operations
@@ -41,45 +43,18 @@ export class UsersService {
      * Inject usersCreateManyProvider
      */
     private readonly usersCreateManyProvider: UsersCreateManyProvider,
+
+    private readonly createUserprovider: CreateUserProvider,
+
+    private readonly findOneByEmailProvider: FindOneByEmailProvider,
   ) {}
 
+  public async findOneByEmail(email: string) {
+    return await this.findOneByEmailProvider.findOneByEmail(email);
+  }
+
   public async createUser(createUserDto: CreateUserDto) {
-    let existingUser = undefined;
-
-    try {
-      // Check if user exists with the same email
-      existingUser = await this.usersRepository.findOne({
-        where: { email: createUserDto.email },
-      });
-    } catch (error) {
-      // Might save the details of the exception to database
-      // Information which is sensitive
-      throw new RequestTimeoutException(
-        'Unable to process your request at the moment please try later',
-        { description: 'Error connecting to the database' },
-      );
-    }
-
-    // Handle exception
-    if (existingUser) {
-      throw new BadRequestException(
-        'The user already exists, please check your email.',
-      );
-    }
-
-    // Create a new user
-    let newUser = this.usersRepository.create(createUserDto);
-
-    try {
-      newUser = await this.usersRepository.save(newUser);
-    } catch (error) {
-      throw new RequestTimeoutException(
-        'Unable to process your request at the moment please try later',
-        { description: 'Error connecting to the database' },
-      );
-    }
-
-    return newUser;
+    return this.createUserprovider.createUser(createUserDto);
   }
 
   /**

@@ -7,6 +7,8 @@ import { User } from './user.entity';
 import { ConfigModule } from '@nestjs/config';
 import profileConfig from './config/profile.config';
 import { UsersCreateManyProvider } from './providers/users-create-many.provider';
+import { CreateUserProvider } from './providers/create-user.provider';
+import { FindOneByEmailProvider } from './providers/find-one-by-email.provider';
 
 @Module({
   imports: [
@@ -15,7 +17,12 @@ import { UsersCreateManyProvider } from './providers/users-create-many.provider'
     ConfigModule.forFeature(profileConfig),
   ],
   controllers: [UsersController],
-  providers: [UsersService, UsersCreateManyProvider],
+  providers: [
+    UsersService,
+    UsersCreateManyProvider,
+    CreateUserProvider,
+    FindOneByEmailProvider,
+  ],
   exports: [UsersService],
 })
 export class UsersModule {}
