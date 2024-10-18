@@ -1,5 +1,5 @@
-import { postType } from '../enums/postType.enum';
-import { postStatus } from '../enums/postStatus.enum';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsEnum,
@@ -16,9 +16,8 @@ import {
   ValidateNested,
 } from 'class-validator';
 import { CreatePostMetaOptionsDto } from '../../meta-options/dtos/create-post-meta-options.dto';
-import { Type } from 'class-transformer';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { Tag } from 'src/tags/tag.entity';
+import { postStatus } from '../enums/postStatus.enum';
+import { postType } from '../enums/postType.enum';
 
 export class CreatePostDto {
   @ApiProperty({
@@ -113,15 +112,6 @@ export class CreatePostDto {
   @ValidateNested({ each: true })
   @Type(() => CreatePostMetaOptionsDto)
   metaOptions?: CreatePostMetaOptionsDto | null;
-
-  @ApiProperty({
-    type: 'integer',
-    required: true,
-    example: 1,
-  })
-  @IsInt()
-  @IsNotEmpty()
-  authorId: number;
 
   @ApiPropertyOptional({
     description: 'Array of ids of tags',

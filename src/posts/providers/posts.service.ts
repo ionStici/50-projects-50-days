@@ -1,20 +1,21 @@
 import {
   BadRequestException,
-  Body,
   Injectable,
   RequestTimeoutException,
 } from '@nestjs/common';
-import { UsersService } from 'src/users/providers/users.service';
-import { CreatePostDto } from '../dtos/create-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { MetaOption } from 'src/meta-options/meta-option.entity';
-import { Repository } from 'typeorm';
-import { Post } from '../post.entity';
-import { TagsService } from 'src/tags/providers/tags.service';
-import { PatchPostDto } from '../dtos/patch-post.dto';
-import { GetPostsDto } from '../dtos/get-posts.dto';
-import { PaginationService } from 'src/common/pagination/providers/pagination.service';
+import { ActiveUserData } from 'src/auth/interfaces/active-user-data.interface';
 import { Paginated } from 'src/common/pagination/interfaces/paginated.interface';
+import { PaginationService } from 'src/common/pagination/providers/pagination.service';
+import { MetaOption } from 'src/meta-options/meta-option.entity';
+import { TagsService } from 'src/tags/providers/tags.service';
+import { UsersService } from 'src/users/providers/users.service';
+import { Repository } from 'typeorm';
+import { CreatePostDto } from '../dtos/create-post.dto';
+import { GetPostsDto } from '../dtos/get-posts.dto';
+import { PatchPostDto } from '../dtos/patch-post.dto';
+import { Post } from '../post.entity';
+import { CreatePostProvider } from './create-post.provider';
 
 @Injectable()
 export class PostsService {
@@ -42,26 +43,15 @@ export class PostsService {
     private readonly tagsService: TagsService,
 
     private readonly paginationService: PaginationService,
+
+    private readonly createPostProvider: CreatePostProvider,
   ) {}
 
   /**
    * Creating new posts
    */
-  public async create(@Body() createPostDto: CreatePostDto) {
-    // Find author from database based on authorId
-    const author = await this.usersService.findOneById(createPostDto.authorId);
-    // Find tags
-    const tags = await this.tagsService.findMultipleTags(createPostDto.tags);
-
-    // Create post
-    const post = this.postRepository.create({
-      ...createPostDto,
-      author: author,
-      tags: tags,
-    });
-
-    // Return the post
-    return await this.postRepository.save(post);
+  public async create(createPostDto: CreatePostDto, user: ActiveUserData) {
+    return await this.createPostProvider.create(createPostDto, user);
   }
 
   // PAGINATION
