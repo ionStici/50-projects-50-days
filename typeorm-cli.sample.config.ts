@@ -7,6 +7,6 @@ export default new DataSource({
   username: 'postgres',
   password: '12345',
   database: 'nest-blog',
-  entities: ['**/*.entity.ts'],
+  entities: ['**/*.entity.js'],
   migrations: ['migrations/*.js'],
 });
